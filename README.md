@@ -36,7 +36,7 @@ Now you can fetch the parameters and pass them to the next command:
 
 (In this example, all the parameters will be available for the node.js app in `process.env`)
 
-# AWS CloudFormation
+# AWS ECS TaskDefinition CloudFormation
 
 ```yaml
 taskdefinition:
