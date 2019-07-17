@@ -1,4 +1,0 @@
-package: go-ssm
-import:
-- package: github.com/aws/aws-sdk-go
-  version: v1.19.27
