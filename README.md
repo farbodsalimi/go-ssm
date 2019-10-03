@@ -2,12 +2,6 @@
 
 A single binary for fetching AWS SSM parameters
 
-# Install
-
-```
-glide install
-```
-
 # Build
 
 ```bash
