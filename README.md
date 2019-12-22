@@ -1,6 +1,6 @@
 # go-ssm
 
-A single binary for fetching AWS SSM parameters
+A single binary for fetching AWS SSM parameters. This library is a helper package for fetching secrets and injecting them in the environment at runtime.
 
 # Build
 
