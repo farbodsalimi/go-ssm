@@ -1,9 +1,10 @@
 package utils
 
 import (
-	"go-ssm/pkg/utils"
 	"os"
 	"testing"
+
+	"go-ssm/pkg/utils"
 )
 
 func TestGetEnvStr(t *testing.T) {
