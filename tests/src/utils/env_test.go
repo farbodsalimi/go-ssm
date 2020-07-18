@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"go-ssm/src/utils"
+	"go-ssm/pkg/utils"
 	"os"
 	"testing"
 )

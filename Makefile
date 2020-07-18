@@ -18,7 +18,6 @@ build: ## Build the binary
 test: ## Test all the test files recursively
 	$(GOTEST) -v ./tests/... -coverpkg=./...
 
-
 test-cover: ## Test and generate the coverage report
 	$(GOTEST)  -coverprofile=coverage.out ./tests/... -coverpkg=./... && $(GOTOOL) cover -func=coverage.out
 
@@ -38,10 +37,6 @@ run: ## Run the binary
 .PHONY: build-linux
 build-linux: ## Cross compilation
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_UNIX) -v
-
-.PHONY: docker-build
-docker-build: ## Build docker image
-	docker run --rm -it -v "$(GOPATH)":/go -w /go/src/bitbucket.org/rsohlich/makepost golang:latest go build -o "$(BINARY_UNIX)" -v
 
 .PHONY: --help
 --help: ##

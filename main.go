@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"go-ssm/src/utils"
+	"go-ssm/pkg/utils"
 	"os"
 	"os/exec"
 	"strings"
