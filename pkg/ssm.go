@@ -1,6 +1,7 @@
 package ssm
 
 import (
+	"context"
 	"flag"
 	"os"
 	"os/exec"
@@ -9,8 +10,8 @@ import (
 
 	"go-ssm/pkg/utils"
 
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 )
 
 // Run fetches ssm keys
@@ -20,14 +21,16 @@ func Run() {
 	SSMKeys, err := utils.GetEnvStr(utils.GetEnvArgs{Key: "SSM_KEYS"})
 	utils.ErrorExit(err)
 
-	sess, err := session.NewSession()
+	ctx := context.Background()
+
+	cfg, err := config.LoadDefaultConfig(ctx)
 	utils.ErrorExit(err)
 
-	ssmsvc := ssm.New(sess)
+	ssmsvc := ssm.NewFromConfig(cfg)
 	withDecryption := true
 
-	for _, key := range strings.Split(SSMKeys, ",") {
-		param, err := ssmsvc.GetParameter(&ssm.GetParameterInput{
+	for key := range strings.SplitSeq(SSMKeys, ",") {
+		param, err := ssmsvc.GetParameter(ctx, &ssm.GetParameterInput{
 			Name:           &key,
 			WithDecryption: &withDecryption,
 		})
