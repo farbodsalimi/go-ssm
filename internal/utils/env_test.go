@@ -3,14 +3,12 @@ package utils
 import (
 	"os"
 	"testing"
-
-	"go-ssm/pkg/utils"
 )
 
 func TestGetEnvStr(t *testing.T) {
 	mockValue := "mock_value"
 	os.Setenv("mock_key", mockValue)
-	value, _ := utils.GetEnvStr(utils.GetEnvArgs{Key: "mock_key"})
+	value, _ := GetEnvStr(GetEnvArgs{Key: "mock_key"})
 
 	if value != mockValue {
 		t.Errorf("GetEnvStr() FAILED, expected %v but got value %v", mockValue, value)
@@ -20,9 +18,13 @@ func TestGetEnvStr(t *testing.T) {
 }
 
 func TestGetEnvStrError(t *testing.T) {
-	_, err := utils.GetEnvStr(utils.GetEnvArgs{Key: "mock_key"})
+	_, err := GetEnvStr(GetEnvArgs{Key: "mock_key"})
 
 	if err == nil {
-		t.Errorf("GetEnvStr() FAILED, expected %v but got value %v", utils.ErrEnvVarEmpty("mock_key"), err)
+		t.Errorf(
+			"GetEnvStr() FAILED, expected %v but got value %v",
+			ErrEnvVarEmpty("mock_key"),
+			err,
+		)
 	}
 }

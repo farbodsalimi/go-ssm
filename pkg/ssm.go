@@ -3,15 +3,16 @@ package ssm
 import (
 	"context"
 	"flag"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
 	"syscall"
 
-	"go-ssm/pkg/utils"
-
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
+
+	"go-ssm/internal/utils"
 )
 
 // Run fetches ssm keys
@@ -19,12 +20,16 @@ func Run() {
 	flag.Parse()
 
 	SSMKeys, err := utils.GetEnvStr(utils.GetEnvArgs{Key: "SSM_KEYS"})
-	utils.ErrorExit(err)
+	if err != nil {
+		log.Fatalf("failed to read SSM_KEYS: %v", err)
+	}
 
 	ctx := context.Background()
 
 	cfg, err := config.LoadDefaultConfig(ctx)
-	utils.ErrorExit(err)
+	if err != nil {
+		log.Fatalf("failed to load AWS config: %v", err)
+	}
 
 	ssmsvc := ssm.NewFromConfig(cfg)
 	withDecryption := true
@@ -34,7 +39,9 @@ func Run() {
 			Name:           &key,
 			WithDecryption: &withDecryption,
 		})
-		utils.ErrorExit(err)
+		if err != nil {
+			log.Fatalf("failed to get SSM parameter %q: %v", key, err)
+		}
 
 		keyPath := strings.Split(*param.Parameter.Name, "/")
 		keyName := keyPath[len(keyPath)-1]
@@ -43,8 +50,12 @@ func Run() {
 	}
 
 	path, err := exec.LookPath(flag.Args()[0])
-	utils.ErrorExit(err)
+	if err != nil {
+		log.Fatalf("failed to find executable %q: %v", flag.Args()[0], err)
+	}
 
 	execErr := syscall.Exec(path, flag.Args()[0:], os.Environ())
-	utils.ErrorExit(execErr)
+	if execErr != nil {
+		log.Fatalf("failed to exec %q: %v", path, execErr)
+	}
 }
